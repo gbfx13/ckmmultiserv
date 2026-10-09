@@ -14,6 +14,7 @@ const NOTIFY_TO = () => env('NOTIFY_TO', 'ckmmultiservicess@gmail.com');
 const COMPANY = {
   name: 'CKM Multiservices LLC',
   phone: '+1 (321) 240-0711',
+  whatsapp: '+1 (407) 491-0767',
   email: 'ckmmultiservicess@gmail.com',
   address: '6735 Conroy Windermere Rd, Suite 233, Orlando, FL 32835',
   hours: 'Monday – Friday, 9:00 AM – 5:00 PM',
@@ -214,8 +215,8 @@ const COPY = {
     p1: 'Thank you for contacting CKM Multiservices. We received your request for a free estimate.',
     p2: 'We will review your request and contact you to discuss your project and schedule a visit.',
     summary: 'Your request', services: 'Service Requested', address: 'Project Address', day: 'Preferred Day', time: 'Preferred Time', photos: 'Photos',
-    questions: 'If you have any questions in the meantime, call or WhatsApp us at',
-    orEmail: 'or email', hours: 'Office hours: Monday – Friday, 9:00 AM – 5:00 PM.',
+    questions: 'If you have any questions in the meantime, call us at', wa: 'or send a WhatsApp message to',
+    orEmail: 'You can also email', hours: 'Office hours: Monday – Friday, 9:00 AM – 5:00 PM.',
     thanks: 'Thank you,', noPref: 'No preference', none: 'None',
     auto: 'This is an automatic confirmation. You can reply to this email to reach our team.',
   },
@@ -224,8 +225,8 @@ const COPY = {
     p1: 'Obrigado por entrar em contato com a CKM Multiservices. Recebemos o seu pedido de orçamento gratuito.',
     p2: 'Vamos analisar o seu pedido e entrar em contato para conversar sobre o projeto e agendar uma visita.',
     summary: 'Seu pedido', services: 'Serviço solicitado', address: 'Endereço do projeto', day: 'Dia de preferência', time: 'Horário de preferência', photos: 'Fotos',
-    questions: 'Se tiver alguma dúvida enquanto isso, ligue ou mande WhatsApp para',
-    orEmail: 'ou envie um e-mail para', hours: 'Horário de atendimento: segunda a sexta, das 9h às 17h.',
+    questions: 'Se tiver alguma dúvida enquanto isso, ligue para', wa: 'ou mande uma mensagem no WhatsApp para',
+    orEmail: 'Você também pode enviar um e-mail para', hours: 'Horário de atendimento: segunda a sexta, das 9h às 17h.',
     thanks: 'Obrigado,', noPref: 'Sem preferência', none: 'Nenhuma',
     auto: 'Esta é uma confirmação automática. Você pode responder este e-mail para falar com a nossa equipe.',
   },
@@ -234,8 +235,8 @@ const COPY = {
     p1: 'Gracias por comunicarse con CKM Multiservices. Recibimos su solicitud de estimado gratis.',
     p2: 'Revisaremos su solicitud y nos comunicaremos con usted para hablar de su proyecto y programar una visita.',
     summary: 'Su solicitud', services: 'Servicio solicitado', address: 'Dirección del proyecto', day: 'Día preferido', time: 'Horario preferido', photos: 'Fotos',
-    questions: 'Si tiene alguna pregunta mientras tanto, llámenos o escríbanos por WhatsApp al',
-    orEmail: 'o envíe un correo a', hours: 'Horario de atención: lunes a viernes, 9:00 AM – 5:00 PM.',
+    questions: 'Si tiene alguna pregunta mientras tanto, llámenos al', wa: 'o escríbanos por WhatsApp al',
+    orEmail: 'También puede escribirnos a', hours: 'Horario de atención: lunes a viernes, 9:00 AM – 5:00 PM.',
     thanks: 'Gracias,', noPref: 'Sin preferencia', none: 'Ninguna',
     auto: 'Esta es una confirmación automática. Puede responder a este correo para comunicarse con nuestro equipo.',
   },
@@ -267,7 +268,7 @@ function customerEmail(d, files) {
   ];
   const text = [
     c.hi(d.firstName), '', c.p1, '', c.p2, '', `${c.summary}:`, ...rows.map(([k, v]) => `- ${k}: ${v}`), '',
-    `${c.questions} ${COMPANY.phone} ${c.orEmail} ${COMPANY.email}.`, c.hours, '',
+    `${c.questions} ${COMPANY.phone} ${c.wa} ${COMPANY.whatsapp}. ${c.orEmail} ${COMPANY.email}.`, c.hours, '',
     c.thanks, COMPANY.name, COMPANY.address, '', c.auto,
   ].join('\n');
   const html = `<!doctype html><html><body style="margin:0;background:#f4f6f8;font-family:Arial,Helvetica,sans-serif;color:#10213a">
@@ -284,7 +285,7 @@ function customerEmail(d, files) {
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;background:#f4f6f8;border-radius:6px">
         ${rows.map(([k, v]) => `<tr><td style="padding:9px 12px;color:#4a5870;width:40%;vertical-align:top">${esc(k)}</td><td style="padding:9px 12px;font-weight:bold">${esc(v)}</td></tr>`).join('')}
       </table>
-      <p style="margin:20px 0 6px">${esc(c.questions)} <a href="tel:+13212400711" style="color:#1653b8;font-weight:bold">${COMPANY.phone}</a> ${esc(c.orEmail)} <a href="mailto:${COMPANY.email}" style="color:#1653b8">${COMPANY.email}</a>.</p>
+      <p style="margin:20px 0 6px">${esc(c.questions)} <a href="tel:+13212400711" style="color:#1653b8;font-weight:bold">${COMPANY.phone}</a> ${esc(c.wa)} <a href="https://wa.me/14074910767" style="color:#1653b8;font-weight:bold">${COMPANY.whatsapp}</a>. ${esc(c.orEmail)} <a href="mailto:${COMPANY.email}" style="color:#1653b8">${COMPANY.email}</a>.</p>
       <p style="margin:0 0 20px;color:#4a5870;font-size:14px">${esc(c.hours)}</p>
       <p style="margin:0">${esc(c.thanks)}<br><strong>${COMPANY.name}</strong><br><span style="color:#4a5870;font-size:13px">${COMPANY.address}</span></p>
     </td></tr>
