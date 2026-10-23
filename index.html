@@ -424,6 +424,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--copper);
 .form-error{margin-top:1.4rem;padding:.9rem 1rem;border-radius:var(--radius);border:1px solid var(--err);color:var(--err);background:color-mix(in srgb,var(--err) 8%,var(--surface));font-weight:600;font-size:.93rem}
 .form-error a{color:inherit}
 .submit-row .btn[disabled]{opacity:.7;cursor:progress;transform:none}
+.wa-photos{display:flex;gap:.8rem;align-items:flex-start;margin:0;padding:1rem;border:1.5px dashed var(--line);border-radius:var(--radius);background:var(--paper);color:var(--ink-2);font-size:.9rem}
+.wa-photos svg{width:24px;height:24px;flex:none;color:var(--copper)}
+.success .btn-wa{justify-self:start;width:auto;padding-inline:1.4rem}
+.success .wa-hint{font-size:.88rem;color:var(--ink-2)}
 .dev-note{font-size:.8rem;color:var(--ink-2);border:1px dashed var(--line);padding:.6rem .8rem;border-radius:4px}
 @media (min-width:1000px){.est-grid{grid-template-columns:.8fr 1.2fr;gap:4rem}.est-aside{position:sticky;top:104px}}
 
@@ -1035,23 +1039,16 @@ h3{font-size:1.3rem}
           </div>
           <div class="row">
             <div class="field">
-              <span class="lbl-like" id="photosLbl">Add Photos <span class="opt">(optional)</span></span>
-              <label class="drop" id="drop" for="photos">
-                <input type="file" id="photos" name="photos" accept="image/*" multiple aria-labelledby="photosLbl">
-                <svg aria-hidden="true"><use href="#i-camera"/></svg>
-                <b>Tap to add photos of the area</b>
-                <small>JPG or PNG. Photos help us understand your project.</small>
-              </label>
-              <div class="thumbs" id="thumbs" aria-live="polite"></div>
+<span class="lbl-like">Photos <span class="opt">(optional)</span></span>
+              <p class="wa-photos"><svg aria-hidden="true"><use href="#i-camera"/></svg><span>After you tap the button below, you can send photos of the area in the same WhatsApp chat. Photos help us understand your project.</span></p>
             </div>
           </div>
         </fieldset>
 
         <div class="hp" aria-hidden="true"><label for="company_website">Company website</label><input type="text" id="company_website" name="company_website" tabindex="-1" autocomplete="off"></div>
-        <p class="form-error" id="formError" role="alert" hidden></p>
         <div class="submit-row">
-          <button class="btn btn-primary" type="submit" id="submitBtn" data-t="Request My Free Estimate">Request My Free Estimate</button>
-          <p>We'll review your request and contact you to discuss your project.</p>
+          <button class="btn btn-wa" type="submit" id="submitBtn"><svg aria-hidden="true"><use href="#i-wa"/></svg><span>Send My Request via WhatsApp</span></button>
+          <p>WhatsApp opens with your request already written. Tap send to deliver it, and we'll contact you to discuss your project.</p>
         </div>
       </form>
       <div class="success" id="success" hidden tabindex="-1" data-noi18n></div>
@@ -1435,6 +1432,14 @@ h3{font-size:1.3rem}
     [`gutter`,`calha`,`canaleta`],
     [`downspout`,`condutor`,`bajante`],
     [`downspouts`,`condutores`,`bajantes`],
+    [`Photos`,`Fotos`,`Fotos`],
+    [`After you tap the button below, you can send photos of the area in the same WhatsApp chat. Photos help us understand your project.`,`Depois de tocar no botão abaixo, você pode mandar fotos do local na mesma conversa do WhatsApp. As fotos nos ajudam a entender seu projeto.`,`Después de tocar el botón de abajo, puede enviar fotos del área en el mismo chat de WhatsApp. Las fotos nos ayudan a entender su proyecto.`],
+    [`Send My Request via WhatsApp`,`Enviar Meu Pedido pelo WhatsApp`,`Enviar Mi Solicitud por WhatsApp`],
+    [`WhatsApp opens with your request already written. Tap send to deliver it, and we'll contact you to discuss your project.`,`O WhatsApp abre com o seu pedido já escrito. Toque em enviar para mandá-lo, e entraremos em contato para conversar sobre o seu projeto.`,`WhatsApp se abre con su solicitud ya escrita. Toque enviar para mandarla y nos comunicaremos con usted para hablar de su proyecto.`],
+    [`Almost done`,`Quase pronto`,`Casi listo`],
+    [`Your request is ready in WhatsApp. Tap send in WhatsApp to deliver it to CKM.`,`Seu pedido está pronto no WhatsApp. Toque em enviar no WhatsApp para mandá-lo à CKM.`,`Su solicitud está lista en WhatsApp. Toque enviar en WhatsApp para mandarla a CKM.`],
+    [`Open WhatsApp`,`Abrir WhatsApp`,`Abrir WhatsApp`],
+    [`WhatsApp didn't open? Tap the button above. You can also send photos of the area in the same chat.`,`O WhatsApp não abriu? Toque no botão acima. Você também pode mandar fotos do local na mesma conversa.`,`¿No se abrió WhatsApp? Toque el botón de arriba. También puede enviar fotos del área en el mismo chat.`],
     [`Submit another request`,`Enviar outro pedido`,`Enviar otra solicitud`]
   ];
   const LANGS=['en','pt','es'], DICT={pt:{},es:{}};
@@ -1629,6 +1634,9 @@ h3{font-size:1.3rem}
   function fallbackSelect(b){ const el=b.previousElementSibling; const r=document.createRange(); r.selectNodeContents(el); const s=getSelection(); s.removeAllRanges(); s.addRange(r); b.dataset.t='Selected'; b.textContent=t('Selected'); setTimeout(()=>{ b.dataset.t='Copy'; b.textContent=t('Copy'); },1600); }
 
   /* ---------- Form ---------- */
+  // CKM business WhatsApp (country code + area code + number, digits only).
+  // Used by the estimate form and the cost calculator.
+  const CKM_WHATSAPP = '14074910767';
   const form=$('#estimateForm'), success=$('#success');
   const today=new Date(); const iso=new Date(today.getTime()-today.getTimezoneOffset()*60000).toISOString().slice(0,10);
   $('#prefDay').min = iso;
@@ -1658,91 +1666,60 @@ h3{font-size:1.3rem}
   $$('input[required]',form).forEach(i=>{ i.addEventListener('blur',()=>{ if(i.value) check(i); }); i.addEventListener('input',()=>{ if(i.closest('.field').classList.contains('invalid')) check(i); }); });
   $$('input[name=service]').forEach(c=>c.addEventListener('change',()=>{ if($$('input[name=service]:checked').length) $('#serviceErr').hidden=true; }));
 
-  // Photos
-  const photos=$('#photos'), thumbs=$('#thumbs'), drop=$('#drop'); let files=[];
-  function renderThumbs(){ thumbs.innerHTML=''; files.forEach((f,i)=>{ const fig=document.createElement('figure'); const img=document.createElement('img'); img.alt='Selected photo '+(i+1); const r=new FileReader(); r.onload=()=>img.src=r.result; r.readAsDataURL(f);
-    const x=document.createElement('button'); x.type='button'; x.textContent='×'; x.setAttribute('aria-label','Remove photo '+(i+1)); x.addEventListener('click',()=>{ files.splice(i,1); renderThumbs(); });
-    fig.append(img,x); thumbs.appendChild(fig); }); }
-  photos.addEventListener('change',()=>{ files=files.concat(Array.from(photos.files).filter(f=>f.type.startsWith('image/'))).slice(0,10); photos.value=''; renderThumbs(); });
-  ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{ e.preventDefault(); drop.classList.add('over'); }));
-  ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,()=>drop.classList.remove('over')));
-  drop.addEventListener('drop',e=>{ e.preventDefault(); files=files.concat(Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/'))).slice(0,10); renderThumbs(); });
 
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   let lastSubmit=null;
+  const LANG_NAME={en:'English',pt:'Portuguese',es:'Spanish'};
+  // The message CKM receives is always in English; it notes the customer's language.
+  function buildRequestMessage(d, svcs){
+    const day = d.prefDay ? new Date(d.prefDay+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}) : 'No preference';
+    const lines = [
+      'Hello CKM! I would like to request a free estimate.', '',
+      'Name: '+d.firstName.trim()+' '+d.lastName.trim(),
+      'Phone: '+d.phone.trim(),
+      'Email: '+d.email.trim(),
+      'Project Address: '+d.address.trim()+', '+d.city.trim()+', '+d.state.trim()+' '+d.zip.trim(),
+      'Service Needed: '+svcs.join(', '),
+      'Preferred Day: '+day,
+      'Preferred Time: '+(d.prefTime || 'No preference')
+    ];
+    if((d.message||'').trim()) lines.push('', 'Project Details:', d.message.trim());
+    if(lang!=='en') lines.push('', 'Preferred language: '+LANG_NAME[lang]);
+    lines.push('', 'Thank you!');
+    return lines.join('\n');
+  }
+  const waLink = text => 'https://wa.me/'+CKM_WHATSAPP+'?text='+encodeURIComponent(text);
   function renderSuccess(){
-    const {d, svcs}=lastSubmit;
+    const {d, svcs, url}=lastSubmit;
     const loc = lang==='pt' ? 'pt-BR' : lang==='es' ? 'es-US' : 'en-US';
     const dayTxt = d.prefDay ? new Date(d.prefDay+'T12:00:00').toLocaleDateString(loc,{weekday:'long',month:'long',day:'numeric'}) : t('No preference');
-    /* INTEGRATION POINT: send this data to the business before launch
-       (e.g. a form service such as Formspree/Netlify Forms, or a CRM / email endpoint). */
     success.innerHTML =
-      '<div class="tick"><svg aria-hidden="true"><use href="#i-check"/></svg></div>'+
-      '<h3>'+t('Thank You')+', '+esc(d.firstName)+'</h3>'+
-      '<p>'+t("We'll review your request and contact you to discuss your project.")+' '+t('For anything urgent, call us at')+' <a href="tel:+14074910767"><b>+1 (407) 491-0767</b></a> ('+t('Monday \u2013 Friday, 9:00 AM \u2013 5:00 PM')+').</p>'+
-      '<dl><dt>'+t('Name')+'</dt><dd>'+esc(d.firstName+' '+d.lastName)+'</dd><dt>'+t('Service')+'</dt><dd>'+esc(svcs.map(t).join(', '))+'</dd><dt>'+t('Address')+'</dt><dd>'+esc(d.address+', '+d.city+', '+d.state+' '+d.zip)+'</dd><dt>'+t('Preferred visit')+'</dt><dd>'+esc(dayTxt+(d.prefTime?' \u00b7 '+d.prefTime:''))+'</dd><dt>'+t('Photos')+'</dt><dd>'+files.length+'</dd></dl>'+
-      (lastSubmit.demo ? '<p class="dev-note">'+t('Preview build: this form is not yet connected to email, so requests are not delivered. Connect it before the site goes live.')+'</p>' : '')+
+      '<div class="tick"><svg aria-hidden="true"><use href="#i-wa"/></svg></div>'+
+      '<h3>'+t('Almost done')+', '+esc(d.firstName)+'</h3>'+
+      '<p>'+t('Your request is ready in WhatsApp. Tap send in WhatsApp to deliver it to CKM.')+'</p>'+
+      '<a class="btn btn-wa" href="'+esc(url)+'" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span>'+t('Open WhatsApp')+'</span></a>'+
+      '<p class="wa-hint">'+t("WhatsApp didn't open? Tap the button above. You can also send photos of the area in the same chat.")+'</p>'+
+      '<dl><dt>'+t('Name')+'</dt><dd>'+esc(d.firstName+' '+d.lastName)+'</dd><dt>'+t('Service')+'</dt><dd>'+esc(svcs.map(t).join(', '))+'</dd><dt>'+t('Address')+'</dt><dd>'+esc(d.address+', '+d.city+', '+d.state+' '+d.zip)+'</dd><dt>'+t('Preferred visit')+'</dt><dd>'+esc(dayTxt+(d.prefTime?' · '+t(d.prefTime):''))+'</dd></dl>'+
+      '<p class="wa-hint">'+t('For anything urgent, call us at')+' <a href="tel:+14074910767"><b>+1 (407) 491-0767</b></a> ('+t('Monday – Friday, 9:00 AM – 5:00 PM')+').</p>'+
       '<button type="button" class="btn btn-text" id="again">'+t('Submit another request')+'</button>';
-    $('#again').addEventListener('click',()=>{ form.reset(); $('#state').value='FL'; files=[]; renderThumbs(); lastSubmit=null; success.hidden=true; form.hidden=false; $('#firstName').focus(); });
+    $('#again').addEventListener('click',()=>{ form.reset(); $('#state').value='FL'; lastSubmit=null; success.hidden=true; form.hidden=false; $('#firstName').focus(); });
   }
   langHooks.push(()=>{ if(lastSubmit && !success.hidden) renderSuccess(); });
-  // Shrink photos in the browser so uploads stay small and fast on mobile data.
-  function shrink(file){
-    return new Promise(resolve=>{
-      if(!/^image\/(jpeg|png|webp)$/i.test(file.type)) return resolve(file);
-      const url=URL.createObjectURL(file), img=new Image();
-      img.onload=()=>{
-        const max=1600, sc=Math.min(1, max/Math.max(img.width,img.height));
-        const c=document.createElement('canvas'); c.width=Math.round(img.width*sc); c.height=Math.round(img.height*sc);
-        c.getContext('2d').drawImage(img,0,0,c.width,c.height); URL.revokeObjectURL(url);
-        c.toBlob(b=> resolve(b && b.size < file.size ? new File([b], file.name.replace(/\.\w+$/,'')+'.jpg', {type:'image/jpeg'}) : file), 'image/jpeg', .8);
-      };
-      img.onerror=()=>{ URL.revokeObjectURL(url); resolve(file); };
-      img.src=url;
-    });
-  }
-  const formErr=$('#formError'), submitBtn=$('#submitBtn');
-  function showFormError(){
-    formErr.innerHTML = esc(t("We couldn't send your request right now. Please try again, or call us at"))+' <a href="tel:+14074910767">+1 (407) 491-0767</a>.';
-    formErr.hidden=false; formErr.scrollIntoView({behavior:'smooth',block:'center'});
-  }
-  function setBusy(b){ submitBtn.disabled=b; submitBtn.dataset.t = b ? 'Sending…' : 'Request My Free Estimate'; submitBtn.textContent=t(submitBtn.dataset.t); }
 
-  form.addEventListener('submit',async e=>{
+  // Nothing is sent from the site: the request opens in WhatsApp, ready for
+  // the customer to send to CKM.
+  form.addEventListener('submit',e=>{
     e.preventDefault();
-    formErr.hidden=true;
     let firstBad=null;
     $$('input[required]',form).forEach(i=>{ if(!check(i) && !firstBad) firstBad=i; });
     const svcs=$$('input[name=service]:checked').map(c=>c.value);
     if(!svcs.length){ $('#serviceErr').hidden=false; if(!firstBad) firstBad=$('#svc-gutter'); }
     if(firstBad){ firstBad.focus(); return; }
     const d=Object.fromEntries(new FormData(form).entries());
-    const endpoint=form.dataset.endpoint;
-
-    if(endpoint){
-      setBusy(true);
-      try{
-        const fd=new FormData();
-        ['firstName','lastName','email','phone','address','city','state','zip','message','prefDay','prefTime','company_website'].forEach(k=>fd.append(k, d[k]||''));
-        svcs.forEach(v=>fd.append('service',v));
-        fd.append('lang', lang);
-        const ready=await Promise.all(files.map(shrink));
-        ready.forEach(f=>fd.append('photos', f, f.name));
-        const r=await fetch(endpoint,{method:'POST', body:fd});
-        const out=await r.json().catch(()=>({}));
-        if(!r.ok || !out.ok){
-          if(r.status===422 && Array.isArray(out.fields)){
-            const bad=out.fields.map(id=>document.getElementById(id)).filter(Boolean);
-            bad.forEach(check); if(out.fields.includes('service')) $('#serviceErr').hidden=false;
-            if(bad[0]){ bad[0].focus(); return; }
-          }
-          showFormError(); return;
-        }
-      }catch(_){ showFormError(); return; }
-      finally{ setBusy(false); }
-    }
-
-    lastSubmit={d, svcs, demo:!endpoint};
+    if((d.company_website||'').trim()) return;               // spam trap
+    const url=waLink(buildRequestMessage(d, svcs));
+    try{ const w=window.open(url,'_blank'); if(w) w.opener=null; }catch(_){}
+    lastSubmit={d, svcs, url};
     renderSuccess();
     form.hidden=true; success.hidden=false; success.focus();
     $('#formCard').scrollIntoView({behavior:'smooth',block:'start'});
@@ -1801,7 +1778,7 @@ h3{font-size:1.3rem}
      drift. Everything runs in the browser: nothing is saved or sent unless the
      customer taps "Send Quote via WhatsApp" and confirms in WhatsApp. */
   const CALC_CONFIG = {
-    whatsappNumber: '14074910767',          // CKM business WhatsApp: country code + area code + number, digits only
+    whatsappNumber: CKM_WHATSAPP,           // set once, near the estimate form code
     gutters: {
       '5in': { label: '5"', name: '5" Gutter', perFtCents: 690 },   // $6.90 per linear foot
       '7in': { label: '7"', name: '7" Gutter', perFtCents: 1680 }   // $16.80 per linear foot

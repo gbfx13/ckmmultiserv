@@ -1,5 +1,14 @@
 # CKM Multiservices: site + notificação de orçamento
 
+> **Status atual (out/2026): o formulário envia pelo WhatsApp.**
+> O formulário "Request a Free Estimate" e a calculadora abrem o WhatsApp da CKM
+> (+1 407 491-0767) com o pedido já escrito; o cliente só toca em enviar.
+> O número fica em `CKM_WHATSAPP`, no `index.html`.
+> A função de e-mail abaixo (`api/estimate.js`) continua no projeto, mas não é usada
+> pelo site agora. Para voltar a enviar por e-mail, siga as instruções abaixo e
+> reconecte o formulário a `/api/estimate`.
+
+
 Site da CKM Multiservices LLC com o formulário "Request a Free Estimate" ligado a um backend que:
 
 1. **Salva** cada pedido no banco de dados (Supabase / Postgres).
