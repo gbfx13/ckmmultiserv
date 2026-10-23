@@ -492,32 +492,44 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--copper);
 .unit-input input{padding-right:3.4rem}
 .unit-input > span{position:absolute;right:1rem;top:50%;transform:translateY(-50%);font:700 .9rem/1 var(--display);letter-spacing:.06em;color:var(--ink-2);pointer-events:none}
 .field-hint{font-size:.84rem;color:var(--ink-2)}
-.stories{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
-.story{position:relative;display:block;cursor:pointer}
-.story input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
-.story > span{display:grid;gap:.25rem;min-height:64px;padding:.8rem 1rem;border:1.5px solid var(--line);border-radius:var(--radius);background:var(--surface);transition:border-color .15s,background .15s}
-.story b{font:800 .98rem/1.2 var(--display)}
-.story small{font-size:.82rem;color:var(--ink-2)}
-.story:hover > span{border-color:var(--ink-2)}
-.story input:checked + span{border-color:var(--copper);background:var(--copper-soft)}
-.story input:focus-visible + span{outline:3px solid var(--copper);outline-offset:2px}
-.calc-actions{display:flex;justify-content:flex-end}
-.quote{display:grid;gap:1.1rem;padding:clamp(22px,3vw,34px);background:var(--band);color:var(--band-fg);border-radius:var(--radius);box-shadow:var(--shadow);min-width:0}
+.opt-cards{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.opt-card{position:relative;display:block;cursor:pointer}
+.opt-card input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.opt-card > span{display:grid;gap:.25rem;min-height:64px;padding:.8rem 1rem;border:1.5px solid var(--line);border-radius:var(--radius);background:var(--surface);transition:border-color .15s,background .15s}
+.opt-card b,.fixed-opt b{font:800 .98rem/1.2 var(--display)}
+.opt-card small,.fixed-opt small{font-size:.82rem;color:var(--ink-2)}
+.opt-card:hover > span{border-color:var(--ink-2)}
+.opt-card input:checked + span{border-color:var(--copper);background:var(--copper-soft)}
+.opt-card input:focus-visible + span{outline:3px solid var(--copper);outline-offset:2px}
+.fixed-opt{display:grid;gap:.25rem;margin:0;padding:.8rem 1rem;border:1.5px dashed var(--line);border-radius:var(--radius);background:var(--surface)}
+.calc-actions{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.8rem}
+.calc-go{color:var(--ink)}
+.quote{display:grid;gap:1.1rem;padding:clamp(22px,3vw,34px);background:var(--band);color:var(--band-fg);border-radius:var(--radius);box-shadow:var(--shadow);min-width:0;outline:none;transition:box-shadow .3s}
+.quote.flash{box-shadow:0 0 0 3px var(--band-accent),var(--shadow)}
 .quote h3{color:var(--band-fg);font-size:1.25rem}
-.q-rows{margin:0;display:grid}
-.q-row{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:.8rem 0;border-bottom:1px solid var(--band-line)}
-.q-row dt{display:grid;gap:.2rem;min-width:0}
-.q-row dt small{font-size:.8rem;color:var(--band-muted)}
-.q-row dd{margin:0;font-weight:700;font-size:1.05rem;white-space:nowrap}
+.q-groups{display:grid;gap:.9rem}
+.q-group{margin:0;display:grid}
+.q-row{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:.42rem 0;font-size:.92rem}
+.q-row dt{color:var(--band-muted);min-width:0}
+.q-row dd{margin:0;font-weight:600;text-align:right;white-space:nowrap}
+.q-sub{border-top:1px solid var(--band-line);margin-top:.25rem;padding-top:.6rem;font-size:1rem}
+.q-sub dt{color:var(--band-fg);font-weight:600}
+.q-sub dd{font-weight:800}
 .q-row dd,.q-total strong,.q-num{font-variant-numeric:tabular-nums}
-.q-total{display:grid;gap:.35rem;padding-top:.3rem}
+.q-total{display:grid;gap:.35rem;padding-top:.9rem;border-top:2px solid var(--band-line)}
 .q-total > span{font:700 .74rem/1.4 var(--display);letter-spacing:.22em;text-transform:uppercase;color:var(--band-muted)}
 .q-total strong{font:800 clamp(2.4rem,6vw,3.3rem)/1 var(--display);color:var(--band-accent);letter-spacing:-.01em;overflow-wrap:anywhere}
 .q-empty{font-size:.9rem;color:var(--band-muted)}
-.quote .btn-primary{width:100%}
-.quote .btn-primary[aria-disabled="true"]{opacity:.55}
+.btn-wa{width:100%;min-height:56px;background:#25d366;color:#06301a;font-size:.95rem}
+.btn-wa:hover{background:#1ebe5b}
+.btn-wa svg{width:22px;height:22px}
+.btn-wa[aria-disabled="true"]{background:var(--band-2);color:var(--band-muted);cursor:not-allowed;transform:none;box-shadow:inset 0 0 0 1px var(--band-line)}
+.q-alt{text-align:center;font-size:.88rem}
+.q-alt a{color:var(--band-fg);text-decoration:underline;text-underline-offset:3px}
+.q-alt a:hover{color:var(--band-accent)}
 .q-note{font-size:.84rem;line-height:1.55;color:var(--band-muted);border-top:1px solid var(--band-line);padding-top:1rem}
-@media (min-width:960px){.calc-grid{grid-template-columns:1.1fr .9fr;gap:2.5rem}.quote{position:sticky;top:104px}}
+@media (min-width:960px){.calc-grid{grid-template-columns:1.1fr .9fr;gap:2.5rem}.quote{position:sticky;top:96px}}
+@media (max-width:420px){.calc-actions{flex-direction:column-reverse;align-items:stretch}.calc-actions .btn{width:100%}}
 
 /* ---- Brand pass: round CKM badge ---- */
 h1,h2,h3{font-weight:800;line-height:1.08;letter-spacing:-.005em}
@@ -770,17 +782,28 @@ h3{font-size:1.3rem}
         <p class="eyebrow">Cost Calculator</p>
         <h2 id="calc-title">Estimate Your Gutter Project</h2>
       </div>
-      <p class="lede">Enter your measurements to see an estimated price for gutters and downspouts before you schedule a visit. No sign-up needed.</p>
+      <p class="lede">Choose your gutter size, enter your measurements and see an estimated price for gutters and downspouts. Then send the estimate to us on WhatsApp. No sign-up needed.</p>
     </div>
     <div class="calc-grid">
       <form class="calc-form" id="calcForm" novalidate>
+        <fieldset class="field">
+          <legend class="lbl-like">Gutter Size</legend>
+          <div class="opt-cards">
+            <label class="opt-card"><input type="radio" name="calcGutter" id="calcGutter5" value="5in" checked><span><b>5" Gutter</b><small><span class="q-num" data-price="gutter-5in"></span>/ft</small></span></label>
+            <label class="opt-card"><input type="radio" name="calcGutter" id="calcGutter7" value="7in"><span><b>7" Gutter</b><small><span class="q-num" data-price="gutter-7in"></span>/ft</small></span></label>
+          </div>
+        </fieldset>
         <div class="field" id="calcLenField">
           <label for="calcLength">Gutter Length</label>
           <div class="unit-input">
             <input type="text" id="calcLength" inputmode="decimal" autocomplete="off" placeholder="e.g. 120" aria-describedby="calcLenHint">
             <span aria-hidden="true">ft</span>
           </div>
-          <p class="field-hint" id="calcLenHint">Total linear feet of gutter. $6.90 per linear foot.</p>
+          <p class="field-hint" id="calcLenHint">Total length of gutter in linear feet. Decimals are fine, like 85.5.</p>
+        </div>
+        <div class="field">
+          <span class="lbl-like">Downspout Type</span>
+          <p class="fixed-opt"><b>4x5 Downspout</b><small>The downspout size we install</small></p>
         </div>
         <div class="field" id="calcDsField">
           <label for="calcDownspouts">Number of Downspouts</label>
@@ -789,28 +812,41 @@ h3{font-size:1.3rem}
         </div>
         <fieldset class="field">
           <legend class="lbl-like">Number of Stories</legend>
-          <div class="stories">
-            <label class="story"><input type="radio" name="calcStories" id="calcStories1" value="1" checked><span><b>1 Story</b><small><span class="q-num">$88.50</span> per downspout</small></span></label>
-            <label class="story"><input type="radio" name="calcStories" id="calcStories2" value="2"><span><b>2 Stories</b><small><span class="q-num">$155.50</span> per downspout</small></span></label>
+          <div class="opt-cards">
+            <label class="opt-card"><input type="radio" name="calcStories" id="calcStories1" value="1" checked><span><b>1 Story</b><small><span class="q-num" data-price="downspout-1"></span> per downspout</small></span></label>
+            <label class="opt-card"><input type="radio" name="calcStories" id="calcStories2" value="2"><span><b>2 Stories</b><small><span class="q-num" data-price="downspout-2"></span> per downspout</small></span></label>
           </div>
         </fieldset>
         <div class="calc-actions">
-          <button type="reset" class="btn btn-text" id="calcReset">Reset</button>
+          <button type="reset" class="btn btn-text" id="calcReset">Reset Calculator</button>
+          <button type="submit" class="btn btn-ghost calc-go" id="calcSubmit">Calculate Estimate</button>
         </div>
       </form>
 
-      <aside class="quote" aria-labelledby="quote-title">
+      <aside class="quote" id="quote" aria-labelledby="quote-title" tabindex="-1">
         <h3 id="quote-title">Your Estimated Quote</h3>
-        <dl class="q-rows" data-noi18n>
-          <div class="q-row"><dt><span id="qGutLbl"></span><small id="qGutDetail"></small></dt><dd id="qGut">&mdash;</dd></div>
-          <div class="q-row"><dt><span id="qDsLbl"></span><small id="qDsDetail"></small></dt><dd id="qDs">&mdash;</dd></div>
-        </dl>
+        <div class="q-groups" data-noi18n>
+          <dl class="q-group">
+            <div class="q-row"><dt data-k="Gutter Size"></dt><dd id="qGutSize"></dd></div>
+            <div class="q-row"><dt data-k="Gutter Length"></dt><dd id="qGutLen"></dd></div>
+            <div class="q-row"><dt data-k="Gutter Price per ft"></dt><dd id="qGutUnit"></dd></div>
+            <div class="q-row q-sub"><dt data-k="Gutter Cost"></dt><dd id="qGutCost"></dd></div>
+          </dl>
+          <dl class="q-group">
+            <div class="q-row"><dt data-k="Downspout Type"></dt><dd id="qDsType"></dd></div>
+            <div class="q-row"><dt data-k="Number of Downspouts"></dt><dd id="qDsCount"></dd></div>
+            <div class="q-row"><dt data-k="Number of Stories"></dt><dd id="qDsStories"></dd></div>
+            <div class="q-row"><dt data-k="Downspout Unit Price"></dt><dd id="qDsUnit"></dd></div>
+            <div class="q-row q-sub"><dt data-k="Downspout Cost"></dt><dd id="qDsCost"></dd></div>
+          </dl>
+        </div>
         <div class="q-total" data-noi18n>
           <span id="qTotLbl"></span>
           <strong id="qTotal" aria-live="polite">&mdash;</strong>
           <p class="q-empty" id="qEmpty"></p>
         </div>
-        <a class="btn btn-primary" href="#estimate" id="calcSchedule">Schedule a Technical Visit</a>
+        <a class="btn btn-wa" id="calcWhatsApp" target="_blank" rel="noopener" aria-disabled="true"><svg aria-hidden="true"><use href="#i-wa"/></svg><span>Send Quote via WhatsApp</span></a>
+        <p class="q-alt"><a href="#estimate" id="calcSchedule">Prefer a form? Schedule a technical visit</a></p>
         <p class="q-note">Please note: This is only a price estimate. Final pricing may vary depending on the property's specific requirements and the results of an on-site inspection. Schedule a technical visit for an accurate quote.</p>
       </aside>
     </div>
@@ -1360,22 +1396,32 @@ h3{font-size:1.3rem}
     [`Siding`,`Siding`,`Siding`],
     [`Cost Calculator`,`Calculadora de Custos`,`Calculadora de Costos`],
     [`Estimate Your Gutter Project`,`Estime o Seu Projeto de Calhas`,`Calcule Su Proyecto de Canaletas`],
-    [`Enter your measurements to see an estimated price for gutters and downspouts before you schedule a visit. No sign-up needed.`,`Informe as medidas para ver um preço estimado de calhas e condutores antes de agendar uma visita. Não é preciso cadastro.`,`Ingrese sus medidas para ver un precio estimado de canaletas y bajantes antes de programar una visita. No necesita registrarse.`],
+    [`Choose your gutter size, enter your measurements and see an estimated price for gutters and downspouts. Then send the estimate to us on WhatsApp. No sign-up needed.`,`Escolha o tamanho da calha, informe as medidas e veja um preço estimado de calhas e condutores. Depois, envie a estimativa para nós pelo WhatsApp. Não é preciso cadastro.`,`Elija el tamaño de la canaleta, ingrese sus medidas y vea un precio estimado de canaletas y bajantes. Luego envíenos la estimación por WhatsApp. No necesita registrarse.`],
+    [`Gutter Size`,`Tamanho da Calha`,`Tamaño de la Canaleta`],
+    [`5" Gutter`,`Calha de 5"`,`Canaleta de 5"`],
+    [`7" Gutter`,`Calha de 7"`,`Canaleta de 7"`],
     [`Gutter Length`,`Comprimento das Calhas`,`Largo de las Canaletas`],
     [`e.g. 120`,`ex.: 120`,`ej.: 120`],
-    [`Total linear feet of gutter. $6.90 per linear foot.`,`Total de calhas em pés lineares (ft). $6.90 por pé linear.`,`Total de canaletas en pies lineales (ft). $6.90 por pie lineal.`],
-    [`Number of Downspouts`,`Número de Condutores (Downspouts)`,`Número de Bajantes (Downspouts)`],
+    [`Total length of gutter in linear feet. Decimals are fine, like 85.5.`,`Comprimento total das calhas em pés lineares (ft). Pode usar decimais, como 85,5.`,`Largo total de las canaletas en pies lineales (ft). Puede usar decimales, como 85.5.`],
+    [`Downspout Type`,`Tipo de Condutor`,`Tipo de Bajante`],
+    [`4x5 Downspout`,`Condutor 4x5`,`Bajante 4x5`],
+    [`The downspout size we install`,`O tamanho de condutor que instalamos`,`El tamaño de bajante que instalamos`],
+    [`Number of Downspouts`,`Número de Condutores`,`Número de Bajantes`],
     [`Whole number. Enter 0 if you don't need downspouts.`,`Número inteiro. Informe 0 se não precisar de condutores.`,`Número entero. Ingrese 0 si no necesita bajantes.`],
     [`Number of Stories`,`Número de Andares`,`Número de Pisos`],
     [`1 Story`,`1 Andar`,`1 Piso`],
     [`2 Stories`,`2 Andares`,`2 Pisos`],
     [`per downspout`,`por condutor`,`por bajante`],
-    [`Reset`,`Limpar`,`Reiniciar`],
+    [`Reset Calculator`,`Limpar Calculadora`,`Reiniciar Calculadora`],
+    [`Calculate Estimate`,`Calcular Estimativa`,`Calcular Estimación`],
     [`Your Estimated Quote`,`Seu Orçamento Estimado`,`Su Cotización Estimada`],
-    [`Gutter cost`,`Custo das calhas`,`Costo de canaletas`],
-    [`Downspouts cost`,`Custo dos condutores`,`Costo de bajantes`],
-    [`Estimated total`,`Total estimado`,`Total estimado`],
-    [`Schedule a Technical Visit`,`Agendar uma Visita Técnica`,`Programar una Visita Técnica`],
+    [`Gutter Price per ft`,`Preço da calha por pé (ft)`,`Precio de la canaleta por pie (ft)`],
+    [`Gutter Cost`,`Custo das Calhas`,`Costo de Canaletas`],
+    [`Downspout Unit Price`,`Preço por Condutor`,`Precio por Bajante`],
+    [`Downspout Cost`,`Custo dos Condutores`,`Costo de Bajantes`],
+    [`Estimated Total`,`Total Estimado`,`Total Estimado`],
+    [`Send Quote via WhatsApp`,`Enviar Orçamento pelo WhatsApp`,`Enviar Cotización por WhatsApp`],
+    [`Prefer a form? Schedule a technical visit`,`Prefere um formulário? Agende uma visita técnica`,`¿Prefiere un formulario? Programe una visita técnica`],
     [`Please note: This is only a price estimate. Final pricing may vary depending on the property's specific requirements and the results of an on-site inspection. Schedule a technical visit for an accurate quote.`,`Atenção: este valor é apenas uma estimativa. O preço final pode variar de acordo com as necessidades específicas do imóvel e com o resultado da inspeção no local. Agende uma visita técnica para receber um orçamento preciso.`,`Importante: este valor es solo una estimación. El precio final puede variar según las necesidades específicas de la propiedad y los resultados de la inspección en el lugar. Programe una visita técnica para recibir una cotización exacta.`],
     [`Enter a gutter length or at least one downspout to see your estimate.`,`Informe o comprimento das calhas ou pelo menos um condutor para ver a estimativa.`,`Ingrese el largo de las canaletas o al menos un bajante para ver su estimación.`],
     [`Check the highlighted fields to see your estimate.`,`Corrija os campos destacados para ver a estimativa.`,`Revise los campos marcados para ver su estimación.`],
@@ -1389,7 +1435,7 @@ h3{font-size:1.3rem}
     [`Enter a whole number, like 2.`,`Informe um número inteiro, como 2.`,`Ingrese un número entero, como 2.`],
     [`Enter 500 downspouts or fewer. For larger projects, schedule a visit.`,`Informe até 500 condutores. Para projetos maiores, agende uma visita.`,`Ingrese 500 bajantes o menos. Para proyectos más grandes, programe una visita.`],
     [`Online estimate`,`Estimativa online`,`Estimación en línea`],
-    [`of gutters`,`de calhas`,`de canaletas`],
+    [`gutter`,`calha`,`canaleta`],
     [`downspout`,`condutor`,`bajante`],
     [`downspouts`,`condutores`,`bajantes`],
     [`Submit another request`,`Enviar outro pedido`,`Enviar otra solicitud`]
@@ -1752,15 +1798,38 @@ h3{font-size:1.3rem}
   langHooks.push(loadVideo);
 
   /* ---------- Cost calculator ----------
-     Prices from CKM: gutters $6.90 per linear foot; downspouts $88.50 each
-     on a 1-story home, $155.50 each on a 2-story home. Everything runs in the
-     browser; nothing typed here is saved or sent. Amounts are kept in cents. */
-  const CALC = { gutterPerFtCents: 690, downspoutCents: { 1: 8850, 2: 15550 }, maxFt: 10000, maxDownspouts: 500 };
+     All prices and the WhatsApp number live in CALC_CONFIG. The on-screen
+     quote and the WhatsApp message are both built from calcState(), so they
+     always show the same numbers. Amounts are kept in cents to avoid rounding
+     drift. Everything runs in the browser: nothing is saved or sent unless the
+     customer taps "Send Quote via WhatsApp" and confirms in WhatsApp. */
+  const CALC_CONFIG = {
+    whatsappNumber: '14074910767',          // CKM business WhatsApp: country code + area code + number, digits only
+    gutters: {
+      '5in': { label: '5"', name: '5" Gutter', perFtCents: 690 },   // $6.90 per linear foot
+      '7in': { label: '7"', name: '7" Gutter', perFtCents: 1680 }   // $16.80 per linear foot
+    },
+    downspoutType: '4x5',
+    downspouts: {
+      1: { perUnitCents: 12500 },             // 4x5, 1 story: $125.00 each
+      2: { perUnitCents: 19500 }              // 4x5, 2 stories: $195.00 each
+    },
+    limits: { maxFt: 10000, maxDownspouts: 500 }
+  };
   const usd = c => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(c / 100);
-  const cLen = $('#calcLength'), cDs = $('#calcDownspouts'), cForm = $('#calcForm'), cBtn = $('#calcSchedule');
+  const fmtFt = ft => new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(ft);
+  const storiesLabel = n => n === 2 ? '2 Stories' : '1 Story';
+  const cLen = $('#calcLength'), cDs = $('#calcDownspouts'), cForm = $('#calcForm');
+  const cWa = $('#calcWhatsApp'), cQuote = $('#quote');
   const cTouched = { len: false, ds: false };
 
-  // Accepts "120", "120.5" and, outside English, "120,5". Returns null when not a number.
+  // Prices shown on the option cards come from the same config.
+  $$('[data-price]', cForm).forEach(el => {
+    const [kind, key] = el.dataset.price.split(/-(.+)/);
+    el.textContent = usd(kind === 'gutter' ? CALC_CONFIG.gutters[key].perFtCents : CALC_CONFIG.downspouts[key].perUnitCents);
+  });
+
+  // Accepts "120", "120.5" and, outside English, "120,5".
   function parseFeet(raw){
     let v = String(raw).trim().replace(/\s+/g, '');
     if (!v) return { empty: true };
@@ -1780,60 +1849,96 @@ h3{font-size:1.3rem}
   }
   function calcState(){
     const L = parseFeet(cLen.value), D = parseCount(cDs.value);
+    const sizeKey = ($('input[name=calcGutter]:checked') || {}).value || '5in';
     const stories = $('#calcStories2').checked ? 2 : 1;
+    const lim = CALC_CONFIG.limits;
     let lenErr = '', dsErr = '';
     if (L.empty) lenErr = 'Enter the gutter length in feet. Use 0 if you only need downspouts.';
     else if (L.neg) lenErr = 'Gutter length cannot be negative.';
     else if (L.bad) lenErr = 'Enter a number, like 120 or 85.5.';
-    else if (L.value > CALC.maxFt) lenErr = 'Enter 10,000 ft or less. For larger projects, schedule a visit.';
+    else if (L.value > lim.maxFt) lenErr = 'Enter 10,000 ft or less. For larger projects, schedule a visit.';
     if (D.empty) dsErr = "Enter the number of downspouts. Use 0 if you don't need any.";
     else if (D.neg) dsErr = 'The number of downspouts cannot be negative.';
     else if (D.frac) dsErr = 'Enter a whole number of downspouts, like 2 or 3.';
     else if (D.bad) dsErr = 'Enter a whole number, like 2.';
-    else if (D.value > CALC.maxDownspouts) dsErr = 'Enter 500 downspouts or fewer. For larger projects, schedule a visit.';
-    const ok = !lenErr && !dsErr;
-    const ft = ok ? L.value : 0, n = ok ? D.value : 0;
-    const gutterCents = Math.round(ft * CALC.gutterPerFtCents);
-    const unitCents = CALC.downspoutCents[stories];
-    const dsCents = n * unitCents;
-    return { ok, lenErr, dsErr, ft, n, stories, unitCents, gutterCents, dsCents, totalCents: gutterCents + dsCents };
+    else if (D.value > lim.maxDownspouts) dsErr = 'Enter 500 downspouts or fewer. For larger projects, schedule a visit.';
+    const valid = !lenErr && !dsErr;
+    const gutter = CALC_CONFIG.gutters[sizeKey];
+    const unitDs = CALC_CONFIG.downspouts[stories].perUnitCents;
+    const ft = valid ? L.value : 0, n = valid ? D.value : 0;
+    const gutterCents = Math.round(ft * gutter.perFtCents);
+    const dsCents = n * unitDs;
+    const totalCents = gutterCents + dsCents;
+    return {
+      valid, ready: valid && totalCents > 0, lenErr, dsErr, sizeKey, stories, ft, n, totalCents,
+      // Display strings shared by the screen and the WhatsApp message
+      text: {
+        size: gutter.label, length: fmtFt(ft) + ' ft', gutterUnit: usd(gutter.perFtCents), gutterCost: usd(gutterCents),
+        dsType: CALC_CONFIG.downspoutType, dsCount: String(n), stories: storiesLabel(stories),
+        dsUnit: usd(unitDs), dsCost: usd(dsCents), total: usd(totalCents)
+      }
+    };
   }
+  function buildWhatsAppMessage(st){
+    const x = st.text;
+    return [
+      'Hello CKM! I would like to request a quote for gutter and downspout services.', '',
+      'Here are the details of my estimate:', '',
+      'Gutter Size: ' + x.size,
+      'Gutter Length: ' + x.length,
+      'Gutter Price per ft: ' + x.gutterUnit,
+      'Gutter Cost: ' + x.gutterCost, '',
+      'Downspout Type: ' + x.dsType,
+      'Number of Downspouts: ' + x.dsCount,
+      'Number of Stories: ' + x.stories,
+      'Downspout Unit Price: ' + x.dsUnit,
+      'Downspout Cost: ' + x.dsCost, '',
+      'Estimated Total: ' + x.total, '',
+      "Please note: This is only a price estimate. Final pricing may vary depending on the property's specific requirements and the results of an on-site inspection. Schedule a technical visit for an accurate quote.", '',
+      'I would like to schedule a technical visit to confirm the final price.', '',
+      'Thank you!'
+    ].join('\n');
+  }
+  const whatsAppUrl = st => 'https://wa.me/' + CALC_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(buildWhatsAppMessage(st));
+
   function showFieldError(field, input, msgKey, show){
     let m = field.querySelector('.err-msg');
+    const hint = input.getAttribute('aria-describedby').split(' ')[0];
     if (show && msgKey){
       if (!m){ m = document.createElement('p'); m.className = 'err-msg'; m.id = input.id + '-err'; field.appendChild(m); }
       m.dataset.t = msgKey; m.textContent = t(msgKey);
       input.setAttribute('aria-invalid', 'true');
-      input.setAttribute('aria-describedby', input.getAttribute('aria-describedby').split(' ')[0] + ' ' + m.id);
+      input.setAttribute('aria-describedby', hint + ' ' + m.id);
       field.classList.add('invalid');
     } else {
       if (m) m.remove();
       input.removeAttribute('aria-invalid');
-      input.setAttribute('aria-describedby', input.getAttribute('aria-describedby').split(' ')[0]);
+      input.setAttribute('aria-describedby', hint);
       field.classList.remove('invalid');
     }
   }
-  const fmtFt = ft => new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(ft);
   function renderCalc(){
     const st = calcState();
     showFieldError($('#calcLenField'), cLen, st.lenErr, cTouched.len);
     showFieldError($('#calcDsField'), cDs, st.dsErr, cTouched.ds);
-    $('#qGutLbl').textContent = t('Gutter cost');
-    $('#qDsLbl').textContent = t('Downspouts cost');
-    $('#qTotLbl').textContent = t('Estimated total');
-    const hasValue = st.ok && st.totalCents > 0;
-    if (hasValue){
-      $('#qGutDetail').textContent = fmtFt(st.ft) + ' ft × $6.90';
-      $('#qDsDetail').textContent = st.n + ' × ' + usd(st.unitCents) + ' (' + t(st.stories === 2 ? '2 Stories' : '1 Story') + ')';
-      $('#qGut').textContent = usd(st.gutterCents);
-      $('#qDs').textContent = usd(st.dsCents);
-      $('#qTotal').textContent = usd(st.totalCents);
-      $('#qEmpty').hidden = true;
+    $$('.q-row dt', cQuote).forEach(dt => dt.textContent = t(dt.dataset.k));
+    $('#qTotLbl').textContent = t('Estimated Total');
+    const x = st.text, dash = '—';
+    const set = (id, v) => { $('#' + id).textContent = st.ready ? v : dash; };
+    set('qGutSize', x.size); set('qGutLen', x.length); set('qGutUnit', x.gutterUnit); set('qGutCost', x.gutterCost);
+    set('qDsType', x.dsType); set('qDsCount', x.dsCount); set('qDsStories', t(x.stories)); set('qDsUnit', x.dsUnit); set('qDsCost', x.dsCost);
+    set('qTotal', x.total);
+    $('#qEmpty').hidden = st.ready;
+    const errorShown = (st.lenErr && cTouched.len) || (st.dsErr && cTouched.ds);
+    if (!st.ready) $('#qEmpty').textContent = t(errorShown ? 'Check the highlighted fields to see your estimate.' : 'Enter a gutter length or at least one downspout to see your estimate.');
+    if (st.ready){
+      cWa.href = whatsAppUrl(st);
+      cWa.setAttribute('aria-disabled', 'false');
+      cWa.removeAttribute('tabindex');
     } else {
-      $('#qGutDetail').textContent = ''; $('#qDsDetail').textContent = '';
-      $('#qGut').textContent = '—'; $('#qDs').textContent = '—'; $('#qTotal').textContent = '—';
-      $('#qEmpty').hidden = false;
-      $('#qEmpty').textContent = t(st.ok ? 'Enter a gutter length or at least one downspout to see your estimate.' : 'Check the highlighted fields to see your estimate.');
+      cWa.removeAttribute('href');
+      cWa.setAttribute('aria-disabled', 'true');
+      cWa.setAttribute('tabindex', '-1');
     }
     return st;
   }
@@ -1841,21 +1946,32 @@ h3{font-size:1.3rem}
   cDs.addEventListener('input', () => { cTouched.ds = true; renderCalc(); });
   cLen.addEventListener('blur', () => { cTouched.len = true; renderCalc(); });
   cDs.addEventListener('blur', () => { cTouched.ds = true; renderCalc(); });
-  $$('input[name=calcStories]').forEach(r => r.addEventListener('change', renderCalc));
-  cForm.addEventListener('submit', e => e.preventDefault());
+  $$('input[name=calcGutter], input[name=calcStories]').forEach(r => r.addEventListener('change', renderCalc));
+  // "Calculate Estimate": the quote already updates live; this shows any
+  // field errors, then brings the quote into view.
+  cForm.addEventListener('submit', e => {
+    e.preventDefault();
+    cTouched.len = true; cTouched.ds = true;
+    const st = renderCalc();
+    if (!st.valid){ (st.lenErr ? cLen : cDs).focus(); return; }
+    if (matchMedia('(max-width: 959px)').matches) cQuote.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    cQuote.classList.remove('flash'); void cQuote.offsetWidth; cQuote.classList.add('flash');
+    setTimeout(() => cQuote.classList.remove('flash'), 1200);
+  });
   cForm.addEventListener('reset', () => {
     setTimeout(() => { cTouched.len = false; cTouched.ds = false; renderCalc(); cLen.focus(); }, 0);
   });
-  // "Schedule a Technical Visit" goes to the existing estimate form. It ticks
-  // Gutter and, only if the message box is empty, notes the estimate there so
-  // the customer can see and edit it before sending.
-  cBtn.addEventListener('click', () => {
+  cWa.addEventListener('click', e => { if (cWa.getAttribute('aria-disabled') === 'true'){ e.preventDefault(); } });
+  // The secondary link opens the existing estimate form with Gutter selected
+  // and, only if the message box is empty, a note of this estimate.
+  $('#calcSchedule').addEventListener('click', () => {
     const st = calcState();
     const g = $('#svc-gutter'); if (g){ g.checked = true; $('#serviceErr').hidden = true; }
     const msg = $('#message');
-    if (msg && !msg.value.trim() && st.ok && st.totalCents > 0){
-      msg.value = t('Online estimate') + ': ' + fmtFt(st.ft) + ' ft ' + t('of gutters') + ', ' + st.n + ' ' + t(st.n === 1 ? 'downspout' : 'downspouts') +
-        ' (' + t(st.stories === 2 ? '2 Stories' : '1 Story') + ') = ' + usd(st.totalCents) + '.';
+    if (msg && !msg.value.trim() && st.ready){
+      const x = st.text;
+      msg.value = t('Online estimate') + ': ' + x.size + ' ' + t('gutter') + ', ' + x.length + '; ' + x.dsCount + ' × ' + x.dsType + ' ' +
+        t(st.n === 1 ? 'downspout' : 'downspouts') + ' (' + t(x.stories) + ') = ' + x.total + '.';
     }
   });
   langHooks.push(renderCalc);
