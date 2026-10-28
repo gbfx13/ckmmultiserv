@@ -804,10 +804,13 @@ h3{font-size:1.3rem}
           </div>
           <p class="field-hint" id="calcLenHint">Total length of gutter in linear feet. Decimals are fine, like 85.5.</p>
         </div>
-        <div class="field">
-          <span class="lbl-like">Downspout Type</span>
-          <p class="fixed-opt"><b>4x5 Downspout</b><small>The downspout size we install</small></p>
-        </div>
+        <fieldset class="field">
+          <legend class="lbl-like">Downspout Type</legend>
+          <div class="opt-cards">
+            <label class="opt-card"><input type="radio" name="calcDownspout" id="calcDs3x4" value="3x4" checked><span><b>3x4 Downspout</b><small>Standard</small></span></label>
+            <label class="opt-card"><input type="radio" name="calcDownspout" id="calcDs4x5" value="4x5"><span><b>4x5 Downspout</b><small>Larger size</small></span></label>
+          </div>
+        </fieldset>
         <div class="field" id="calcDsField">
           <label for="calcDownspouts">Number of Downspouts</label>
           <input type="text" id="calcDownspouts" inputmode="numeric" autocomplete="off" value="0" aria-describedby="calcDsHint">
@@ -1398,6 +1401,9 @@ h3{font-size:1.3rem}
     [`e.g. 120`,`ex.: 120`,`ej.: 120`],
     [`Total length of gutter in linear feet. Decimals are fine, like 85.5.`,`Comprimento total das calhas em pés lineares (ft). Pode usar decimais, como 85,5.`,`Largo total de las canaletas en pies lineales (ft). Puede usar decimales, como 85.5.`],
     [`Downspout Type`,`Tipo de Condutor`,`Tipo de Bajante`],
+    [`3x4 Downspout`,`Condutor 3x4`,`Bajante 3x4`],
+    [`Standard`,`Padrão`,`Estándar`],
+    [`Larger size`,`Tamanho maior`,`Tamaño más grande`],
     [`4x5 Downspout`,`Condutor 4x5`,`Bajante 4x5`],
     [`The downspout size we install`,`O tamanho de condutor que instalamos`,`El tamaño de bajante que instalamos`],
     [`Number of Downspouts`,`Número de Condutores`,`Número de Bajantes`],
@@ -1783,10 +1789,10 @@ h3{font-size:1.3rem}
       '5in': { label: '5"', name: '5" Gutter', perFtCents: 690 },   // $6.90 per linear foot
       '7in': { label: '7"', name: '7" Gutter', perFtCents: 1680 }   // $16.80 per linear foot
     },
-    downspoutType: '4x5',
-    downspouts: {
-      1: { perUnitCents: 12500 },             // 4x5, 1 story: $125.00 each
-      2: { perUnitCents: 19500 }              // 4x5, 2 stories: $195.00 each
+    defaultDownspout: '3x4',
+    downspouts: {                             // price per downspout, by model and number of stories
+      '3x4': { label: '3x4', perUnitCents: { 1: 9340,  2: 16790 } },   // 1 story $93.40 · 2 stories $167.90
+      '4x5': { label: '4x5', perUnitCents: { 1: 13750, 2: 21700 } }    // 1 story $137.50 · 2 stories $217.00
     },
     limits: { maxFt: 10000, maxDownspouts: 500 }
   };
@@ -1797,11 +1803,15 @@ h3{font-size:1.3rem}
   const cWa = $('#calcWhatsApp'), cQuote = $('#quote');
   const cTouched = { len: false, ds: false };
 
-  // Prices shown on the option cards come from the same config.
-  $$('[data-price]', cForm).forEach(el => {
-    const [kind, key] = el.dataset.price.split(/-(.+)/);
-    el.textContent = usd(kind === 'gutter' ? CALC_CONFIG.gutters[key].perFtCents : CALC_CONFIG.downspouts[key].perUnitCents);
-  });
+  // Prices shown on the option cards come from the same config. The story
+  // cards show the price of the downspout model currently selected.
+  const dsModel = () => ($('input[name=calcDownspout]:checked') || {}).value || CALC_CONFIG.defaultDownspout;
+  function updatePriceLabels(){
+    $$('[data-price]', cForm).forEach(el => {
+      const [kind, key] = el.dataset.price.split(/-(.+)/);
+      el.textContent = usd(kind === 'gutter' ? CALC_CONFIG.gutters[key].perFtCents : CALC_CONFIG.downspouts[dsModel()].perUnitCents[key]);
+    });
+  }
 
   // Accepts "120", "120.5" and, outside English, "120,5".
   function parseFeet(raw){
@@ -1825,6 +1835,7 @@ h3{font-size:1.3rem}
     const L = parseFeet(cLen.value), D = parseCount(cDs.value);
     const sizeKey = ($('input[name=calcGutter]:checked') || {}).value || '5in';
     const stories = $('#calcStories2').checked ? 2 : 1;
+    const dsKey = dsModel();
     const lim = CALC_CONFIG.limits;
     let lenErr = '', dsErr = '';
     if (L.empty) lenErr = 'Enter the gutter length in feet. Use 0 if you only need downspouts.';
@@ -1838,17 +1849,17 @@ h3{font-size:1.3rem}
     else if (D.value > lim.maxDownspouts) dsErr = 'Enter 500 downspouts or fewer. For larger projects, schedule a visit.';
     const valid = !lenErr && !dsErr;
     const gutter = CALC_CONFIG.gutters[sizeKey];
-    const unitDs = CALC_CONFIG.downspouts[stories].perUnitCents;
+    const unitDs = CALC_CONFIG.downspouts[dsKey].perUnitCents[stories];
     const ft = valid ? L.value : 0, n = valid ? D.value : 0;
     const gutterCents = Math.round(ft * gutter.perFtCents);
     const dsCents = n * unitDs;
     const totalCents = gutterCents + dsCents;
     return {
-      valid, ready: valid && totalCents > 0, lenErr, dsErr, sizeKey, stories, ft, n, totalCents,
+      valid, ready: valid && totalCents > 0, lenErr, dsErr, sizeKey, dsKey, stories, ft, n, totalCents,
       // Display strings shared by the screen and the WhatsApp message
       text: {
         size: gutter.label, length: fmtFt(ft) + ' ft', gutterUnit: usd(gutter.perFtCents), gutterCost: usd(gutterCents),
-        dsType: CALC_CONFIG.downspoutType, dsCount: String(n), stories: storiesLabel(stories),
+        dsType: CALC_CONFIG.downspouts[dsKey].label, dsCount: String(n), stories: storiesLabel(stories),
         dsUnit: usd(unitDs), dsCost: usd(dsCents), total: usd(totalCents)
       }
     };
@@ -1892,6 +1903,7 @@ h3{font-size:1.3rem}
     }
   }
   function renderCalc(){
+    updatePriceLabels();
     const st = calcState();
     showFieldError($('#calcLenField'), cLen, st.lenErr, cTouched.len);
     showFieldError($('#calcDsField'), cDs, st.dsErr, cTouched.ds);
@@ -1920,7 +1932,7 @@ h3{font-size:1.3rem}
   cDs.addEventListener('input', () => { cTouched.ds = true; renderCalc(); });
   cLen.addEventListener('blur', () => { cTouched.len = true; renderCalc(); });
   cDs.addEventListener('blur', () => { cTouched.ds = true; renderCalc(); });
-  $$('input[name=calcGutter], input[name=calcStories]').forEach(r => r.addEventListener('change', renderCalc));
+  $$('input[name=calcGutter], input[name=calcStories], input[name=calcDownspout]').forEach(r => r.addEventListener('change', renderCalc));
   // "Calculate Estimate": the quote already updates live; this shows any
   // field errors, then brings the quote into view.
   cForm.addEventListener('submit', e => {
