@@ -423,6 +423,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--copper);
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .form-error{margin-top:1.4rem;padding:.9rem 1rem;border-radius:var(--radius);border:1px solid var(--err);color:var(--err);background:color-mix(in srgb,var(--err) 8%,var(--surface));font-weight:600;font-size:.93rem}
 .form-error a{color:inherit}
+.btn-mail{width:100%;min-height:56px;background:var(--band);color:var(--band-fg);font-size:.95rem}
+.btn-mail:hover{background:var(--band-2)}
+.copy-line{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;font-size:.92rem}
+.copy-line .btn{min-height:40px;padding:.5rem .9rem;font-size:.75rem}
 .submit-row .btn[disabled]{opacity:.7;cursor:progress;transform:none}
 .wa-photos{display:flex;gap:.8rem;align-items:flex-start;margin:0;padding:1rem;border:1.5px dashed var(--line);border-radius:var(--radius);background:var(--paper);color:var(--ink-2);font-size:.9rem}
 .wa-photos svg{width:24px;height:24px;flex:none;color:var(--copper)}
@@ -1043,15 +1047,15 @@ h3{font-size:1.3rem}
           <div class="row">
             <div class="field">
 <span class="lbl-like">Photos <span class="opt">(optional)</span></span>
-              <p class="wa-photos"><svg aria-hidden="true"><use href="#i-camera"/></svg><span>After you tap the button below, you can send photos of the area in the same WhatsApp chat. Photos help us understand your project.</span></p>
+              <p class="wa-photos"><svg aria-hidden="true"><use href="#i-camera"/></svg><span>After you tap the button below, you can attach photos of the area to your email. Photos help us understand your project.</span></p>
             </div>
           </div>
         </fieldset>
 
         <div class="hp" aria-hidden="true"><label for="company_website">Company website</label><input type="text" id="company_website" name="company_website" tabindex="-1" autocomplete="off"></div>
         <div class="submit-row">
-          <button class="btn btn-wa" type="submit" id="submitBtn"><svg aria-hidden="true"><use href="#i-wa"/></svg><span>Send My Request via WhatsApp</span></button>
-          <p>WhatsApp opens with your request already written. Tap send to deliver it, and we'll contact you to discuss your project.</p>
+          <button class="btn btn-mail" type="submit" id="submitBtn"><svg aria-hidden="true"><use href="#i-mail"/></svg><span>Get a Free Estimate</span></button>
+          <p>Your email app opens with your request already written. Tap send to deliver it, and we'll contact you to discuss your project.</p>
         </div>
       </form>
       <div class="success" id="success" hidden tabindex="-1" data-noi18n></div>
@@ -1439,7 +1443,14 @@ h3{font-size:1.3rem}
     [`downspout`,`condutor`,`bajante`],
     [`downspouts`,`condutores`,`bajantes`],
     [`Photos`,`Fotos`,`Fotos`],
-    [`After you tap the button below, you can send photos of the area in the same WhatsApp chat. Photos help us understand your project.`,`Depois de tocar no botão abaixo, você pode mandar fotos do local na mesma conversa do WhatsApp. As fotos nos ajudam a entender seu projeto.`,`Después de tocar el botón de abajo, puede enviar fotos del área en el mismo chat de WhatsApp. Las fotos nos ayudan a entender su proyecto.`],
+    [`After you tap the button below, you can attach photos of the area to your email. Photos help us understand your project.`,`Depois de tocar no botão abaixo, você pode anexar fotos do local ao email. As fotos nos ajudam a entender seu projeto.`,`Después de tocar el botón de abajo, puede adjuntar fotos del área a su correo. Las fotos nos ayudan a entender su proyecto.`],
+    [`Your email app opens with your request already written. Tap send to deliver it, and we'll contact you to discuss your project.`,`O seu app de email abre com o pedido já escrito. Toque em enviar para mandá-lo, e entraremos em contato para conversar sobre o seu projeto.`,`Su app de correo se abre con su solicitud ya escrita. Toque enviar para mandarla y nos comunicaremos con usted para hablar de su proyecto.`],
+    [`Your request is ready in your email app. Tap send in your email to deliver it to CKM.`,`Seu pedido está pronto no seu app de email. Toque em enviar no email para mandá-lo à CKM.`,`Su solicitud está lista en su app de correo. Toque enviar en su correo para mandarla a CKM.`],
+    [`Open Email`,`Abrir Email`,`Abrir Correo`],
+    [`Email app didn't open? Copy our address and your request, then send them from your email (Gmail, Outlook, etc.).`,`O app de email não abriu? Copie nosso endereço e o seu pedido e envie pelo seu email (Gmail, Outlook etc.).`,`¿No se abrió su app de correo? Copie nuestra dirección y su solicitud y envíelas desde su correo (Gmail, Outlook, etc.).`],
+    [`Copy address`,`Copiar endereço`,`Copiar dirección`],
+    [`Copy request`,`Copiar pedido`,`Copiar solicitud`],
+
     [`Send My Request via WhatsApp`,`Enviar Meu Pedido pelo WhatsApp`,`Enviar Mi Solicitud por WhatsApp`],
     [`WhatsApp opens with your request already written. Tap send to deliver it, and we'll contact you to discuss your project.`,`O WhatsApp abre com o seu pedido já escrito. Toque em enviar para mandá-lo, e entraremos em contato para conversar sobre o seu projeto.`,`WhatsApp se abre con su solicitud ya escrita. Toque enviar para mandarla y nos comunicaremos con usted para hablar de su proyecto.`],
     [`Almost done`,`Quase pronto`,`Casi listo`],
@@ -1694,26 +1705,35 @@ h3{font-size:1.3rem}
     lines.push('', 'Thank you!');
     return lines.join('\n');
   }
-  const waLink = text => 'https://wa.me/'+CKM_WHATSAPP+'?text='+encodeURIComponent(text);
+  const CKM_EMAIL = 'ckmmultiservicess@gmail.com';
+  const mailLink = (subject, text) => 'mailto:'+CKM_EMAIL+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(text.replace(/\n/g,'\r\n'));
+  function copyText(btn, text){
+    const label=btn.dataset.t; const done=()=>{ btn.textContent=t('Copied'); setTimeout(()=>{ btn.textContent=t(label); },1600); };
+    try{ navigator.clipboard.writeText(text).then(done).catch(()=>{}); }catch(_){}
+  }
   function renderSuccess(){
-    const {d, svcs, url}=lastSubmit;
+    const {d, svcs, mailUrl, text}=lastSubmit;
     const loc = lang==='pt' ? 'pt-BR' : lang==='es' ? 'es-US' : 'en-US';
     const dayTxt = d.prefDay ? new Date(d.prefDay+'T12:00:00').toLocaleDateString(loc,{weekday:'long',month:'long',day:'numeric'}) : t('No preference');
+    const main =
+        '<p>'+t('Your request is ready in your email app. Tap send in your email to deliver it to CKM.')+'</p>'+
+        '<a class="btn btn-mail" href="'+esc(mailUrl)+'"><svg aria-hidden="true"><use href="#i-mail"/></svg><span>'+t('Open Email')+'</span></a>'+
+        '<p class="wa-hint">'+t("Email app didn't open? Copy our address and your request, then send them from your email (Gmail, Outlook, etc.).")+'</p>'+
+        '<div class="copy-line"><b>'+CKM_EMAIL+'</b><button type="button" class="btn btn-ghost" id="cpAddr" data-t="Copy address">'+t('Copy address')+'</button><button type="button" class="btn btn-ghost" id="cpReq" data-t="Copy request">'+t('Copy request')+'</button></div>';
     success.innerHTML =
-      '<div class="tick"><svg aria-hidden="true"><use href="#i-wa"/></svg></div>'+
-      '<h3>'+t('Almost done')+', '+esc(d.firstName)+'</h3>'+
-      '<p>'+t('Your request is ready in WhatsApp. Tap send in WhatsApp to deliver it to CKM.')+'</p>'+
-      '<a class="btn btn-wa" href="'+esc(url)+'" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span>'+t('Open WhatsApp')+'</span></a>'+
-      '<p class="wa-hint">'+t("WhatsApp didn't open? Tap the button above. You can also send photos of the area in the same chat.")+'</p>'+
+      '<div class="tick"><svg aria-hidden="true"><use href="#i-mail"/></svg></div>'+
+      '<h3>'+t('Almost done')+', '+esc(d.firstName)+'</h3>'+ main +
       '<dl><dt>'+t('Name')+'</dt><dd>'+esc(d.firstName+' '+d.lastName)+'</dd><dt>'+t('Service')+'</dt><dd>'+esc(svcs.map(t).join(', '))+'</dd><dt>'+t('Address')+'</dt><dd>'+esc(d.address+', '+d.city+', '+d.state+' '+d.zip)+'</dd><dt>'+t('Preferred visit')+'</dt><dd>'+esc(dayTxt+(d.prefTime?' · '+t(d.prefTime):''))+'</dd></dl>'+
       '<p class="wa-hint">'+t('For anything urgent, call us at')+' <a href="tel:+14074910767"><b>+1 (407) 491-0767</b></a> ('+t('Monday – Friday, 9:00 AM – 5:00 PM')+').</p>'+
       '<button type="button" class="btn btn-text" id="again">'+t('Submit another request')+'</button>';
+    $('#cpAddr').addEventListener('click',e=>copyText(e.currentTarget, CKM_EMAIL));
+    $('#cpReq').addEventListener('click',e=>copyText(e.currentTarget, text));
     $('#again').addEventListener('click',()=>{ form.reset(); $('#state').value='FL'; lastSubmit=null; success.hidden=true; form.hidden=false; $('#firstName').focus(); });
   }
   langHooks.push(()=>{ if(lastSubmit && !success.hidden) renderSuccess(); });
 
-  // Nothing is sent from the site: the request opens in WhatsApp, ready for
-  // the customer to send to CKM.
+  // Nothing is sent from the site: the request opens in the customer's email
+  // app, addressed to CKM and ready to send.
   form.addEventListener('submit',e=>{
     e.preventDefault();
     let firstBad=null;
@@ -1723,9 +1743,11 @@ h3{font-size:1.3rem}
     if(firstBad){ firstBad.focus(); return; }
     const d=Object.fromEntries(new FormData(form).entries());
     if((d.company_website||'').trim()) return;               // spam trap
-    const url=waLink(buildRequestMessage(d, svcs));
-    try{ const w=window.open(url,'_blank'); if(w) w.opener=null; }catch(_){}
-    lastSubmit={d, svcs, url};
+    const text=buildRequestMessage(d, svcs);
+    const subject='Free Estimate Request – '+d.firstName.trim()+' '+d.lastName.trim()+', '+d.city.trim();
+    const mailUrl=mailLink(subject, text);
+    window.location.href=mailUrl;
+    lastSubmit={d, svcs, mailUrl, text};
     renderSuccess();
     form.hidden=true; success.hidden=false; success.focus();
     $('#formCard').scrollIntoView({behavior:'smooth',block:'start'});
